@@ -1,7 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="#F8FBFF"
+    tools:context=".ui.LoginActivity">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Absensi Microdata"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#012970"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Silakan login menggunakan Username Anda"
+        android:textColor="#899BBD"
+        android:textSize="14sp"
+        android:layout_marginBottom="32dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        app:boxStrokeColor="#4154F1"
+        app:hintTextColor="#4154F1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="#4154F1"
+        app:hintTextColor="#4154F1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="32dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Login"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:backgroundTint="#4154F1" />
 
 </LinearLayout>
