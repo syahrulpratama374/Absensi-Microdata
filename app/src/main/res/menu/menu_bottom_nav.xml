@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_absen_masuk"
+        android:title="Absen Masuk" />
+    <item
+        android:id="@+id/menu_absen_pulang"
+        android:title="Absen Pulang" />
+    <item
+        android:id="@+id/menu_izin"
+        android:title="Izin" />
+    <item
+        android:id="@+id/menu_profile"
+        android:title="Profile" />
+</menu>
