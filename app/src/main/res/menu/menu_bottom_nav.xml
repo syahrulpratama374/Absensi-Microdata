@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_absen_masuk"
+        android:icon="@drawable/outline_assignment_turned_in_24"
         android:title="Absen Masuk" />
     <item
         android:id="@+id/menu_absen_pulang"
+        android:icon="@drawable/outline_assignment_return_mirror_24"
         android:title="Absen Pulang" />
     <item
         android:id="@+id/menu_izin"
+        android:icon="@drawable/outline_add_notes_24"
         android:title="Izin" />
     <item
         android:id="@+id/menu_profile"
+        android:icon="@drawable/baseline_account_circle_24"
         android:title="Profile" />
 </menu>

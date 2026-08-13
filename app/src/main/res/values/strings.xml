@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Absensi Microdata</string>
+    <string name="from_microdata">from Microdata</string>
+    <string name="from">from</string>
+    <string name="microdata">Microdata</string>
+    <string name="menu_absen_masuk">Absen Masuk</string>
+    <string name="menu_absen_pulang">Absen Pulang</string>
+    <string name="menu_izin">Izin</string>
+    <string name="menu_profile">Profile</string>
 </resources>
