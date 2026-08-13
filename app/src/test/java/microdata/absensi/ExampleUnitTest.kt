@@ -1,4 +1,4 @@
-package pratama.syahrul.absensimicrodata
+package microdata.absensi
 
 import org.junit.Test
 

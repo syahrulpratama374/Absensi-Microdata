@@ -1,4 +1,4 @@
-package pratama.syahrul.absensimicrodata
+package microdata.absensi
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
