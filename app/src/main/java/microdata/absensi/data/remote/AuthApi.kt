@@ -1,5 +1,7 @@
 package microdata.absensi.data.remote
 
+import microdata.absensi.data.model.UbahPasswordRequest
+import microdata.absensi.data.model.GeneralResponse
 import microdata.absensi.data.model.AbsenRequest
 import microdata.absensi.data.model.AbsenResponse
 import microdata.absensi.data.model.LoginRequest
@@ -35,4 +37,11 @@ interface AuthApi {
     suspend fun logout(
         @Body request: LogoutRequest
     ): Response<AbsenResponse>
+
+    @POST("ubah-password")
+    suspend fun ubahPassword(
+        @Header("Authorization") token: String,
+        @Header("x-device-id") deviceId: String,
+        @Body request: UbahPasswordRequest
+    ): Response<GeneralResponse>
 }
