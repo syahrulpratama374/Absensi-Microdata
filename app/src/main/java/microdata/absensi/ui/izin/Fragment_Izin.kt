@@ -2,13 +2,10 @@ package microdata.absensi.ui.izin
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,10 +22,9 @@ import kotlinx.coroutines.launch
 import microdata.absensi.R
 import microdata.absensi.data.model.AbsenRequest
 import microdata.absensi.data.remote.RetrofitClient
+import microdata.absensi.utils.ImageUtils
 import microdata.absensi.utils.UtilsSession
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,27 +42,7 @@ class IzinFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 photoUri?.let { uri ->
                     Log.d("Izin", "photoUri=$uri")
-                    val file = File(uri.path ?: "")
-                    Log.d("Izin", "file exists=${file.exists()} length=${file.length()}")
-
-                    var bitmap = if (file.exists() && file.length() > 0) loadSampledBitmap(uri) else null
-
-                    if (bitmap == null) {
-                        // Fallback: beberapa HP cuma kasih thumbnail via intent data
-                        val thumb = result.data?.extras?.get("data") as? Bitmap
-                        Log.d("Izin", "fallback thumbnail=${thumb != null}")
-                        if (thumb != null) {
-                            bitmap = thumb
-                            try {
-                                FileOutputStream(file).use { out ->
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("Izin", "gagal simpan thumbnail", e)
-                            }
-                        }
-                    }
-
+                    val bitmap = ImageUtils.loadSampledBitmap(requireContext(), uri)
                     Log.d("Izin", "bitmap=${bitmap?.width}x${bitmap?.height}")
                     if (bitmap != null) {
                         ivPreview.setImageBitmap(bitmap)
@@ -129,43 +105,6 @@ class IzinFragment : Fragment() {
         }
     }
 
-    private fun photoToBase64(uri: Uri): String {
-        val file = File(uri.path ?: "")
-        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeFile(file.absolutePath, options)
-
-        var sampleSize = 1
-        val maxDim = 1024
-        while (options.outWidth / sampleSize > maxDim || options.outHeight / sampleSize > maxDim) {
-            sampleSize *= 2
-        }
-
-        val decodeOptions = BitmapFactory.Options().apply { inSampleSize = sampleSize }
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath, decodeOptions) ?: return ""
-
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
-        bitmap.recycle()
-
-        val encoded = Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
-        return "data:image/jpeg;base64,$encoded"
-    }
-
-    private fun loadSampledBitmap(uri: Uri): Bitmap? {
-        val file = File(uri.path ?: "")
-        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeFile(file.absolutePath, options)
-
-        var sampleSize = 1
-        val maxDim = 1024
-        while (options.outWidth / sampleSize > maxDim || options.outHeight / sampleSize > maxDim) {
-            sampleSize *= 2
-        }
-
-        val decodeOptions = BitmapFactory.Options().apply { inSampleSize = sampleSize }
-        return BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
-    }
-
     private fun submitIzin() {
         val uri = photoUri
         val keterangan = etKeterangan.text?.toString()?.trim() ?: ""
@@ -185,7 +124,7 @@ class IzinFragment : Fragment() {
             return
         }
 
-        val fileBukti = photoToBase64(uri)
+        val fileBukti = ImageUtils.encodeToBase64(requireContext(), uri)
         if (fileBukti.isEmpty()) {
             Toast.makeText(requireContext(), "Gagal proses foto", Toast.LENGTH_SHORT).show()
             return
