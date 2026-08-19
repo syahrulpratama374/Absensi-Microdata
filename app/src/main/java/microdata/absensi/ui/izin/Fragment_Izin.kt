@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import microdata.absensi.data.remote.RetrofitClient
 import microdata.absensi.utils.UtilsSession
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,8 +45,37 @@ class IzinFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 photoUri?.let { uri ->
-                    ivPreview.setImageURI(uri)
-                }
+                    Log.d("Izin", "photoUri=$uri")
+                    val file = File(uri.path ?: "")
+                    Log.d("Izin", "file exists=${file.exists()} length=${file.length()}")
+
+                    var bitmap = if (file.exists() && file.length() > 0) loadSampledBitmap(uri) else null
+
+                    if (bitmap == null) {
+                        // Fallback: beberapa HP cuma kasih thumbnail via intent data
+                        val thumb = result.data?.extras?.get("data") as? Bitmap
+                        Log.d("Izin", "fallback thumbnail=${thumb != null}")
+                        if (thumb != null) {
+                            bitmap = thumb
+                            try {
+                                FileOutputStream(file).use { out ->
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)
+                                }
+                            } catch (e: Exception) {
+                                Log.e("Izin", "gagal simpan thumbnail", e)
+                            }
+                        }
+                    }
+
+                    Log.d("Izin", "bitmap=${bitmap?.width}x${bitmap?.height}")
+                    if (bitmap != null) {
+                        ivPreview.setImageBitmap(bitmap)
+                    } else {
+                        Toast.makeText(requireContext(), "Gagal memuat foto", Toast.LENGTH_SHORT).show()
+                    }
+                } ?: Log.d("Izin", "photoUri null")
+            } else {
+                Log.d("Izin", "resultCode=${result.resultCode}")
             }
         }
 
@@ -118,6 +149,21 @@ class IzinFragment : Fragment() {
 
         val encoded = Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
         return "data:image/jpeg;base64,$encoded"
+    }
+
+    private fun loadSampledBitmap(uri: Uri): Bitmap? {
+        val file = File(uri.path ?: "")
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, options)
+
+        var sampleSize = 1
+        val maxDim = 1024
+        while (options.outWidth / sampleSize > maxDim || options.outHeight / sampleSize > maxDim) {
+            sampleSize *= 2
+        }
+
+        val decodeOptions = BitmapFactory.Options().apply { inSampleSize = sampleSize }
+        return BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
     }
 
     private fun submitIzin() {

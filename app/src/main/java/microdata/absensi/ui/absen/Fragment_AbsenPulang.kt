@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +44,7 @@ class AbsenPulangFragment : Fragment() {
     private var lat: Double? = null
     private var lng: Double? = null
     private var marker: Marker? = null
+    private var locationListener: LocationListener? = null
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -117,6 +120,14 @@ class AbsenPulangFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        locationListener?.let {
+            try {
+                val lm = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                lm.removeUpdates(it)
+            } catch (_: Exception) {
+            }
+        }
+        locationListener = null
         if (::mapView.isInitialized) {
             mapView.onDetach()
         }
@@ -131,25 +142,45 @@ class AbsenPulangFragment : Fragment() {
     private fun getLocation() {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
-        if (location != null) {
-            lat = location.latitude
-            lng = location.longitude
-            tvKoordinat.text = String.format(
-                Locale.getDefault(),
-                "Koordinat: %.6f, %.6f",
-                location.latitude,
-                location.longitude
-            )
-            updateMap(location)
-        } else {
-            tvKoordinat.text = "Koordinat: belum didapat, pastikan GPS aktif"
+        tvKoordinat.text = "Koordinat: mencari lokasi, pastikan GPS aktif..."
+
+        // Minta posisi terbaru dari GPS biar titiknya akurat
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                if (!isAdded || view == null) return
+                updateLocationUi(location)
+            }
+        }
+        locationListener = listener
+        try {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, listener, Looper.getMainLooper())
+            }
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, listener, Looper.getMainLooper())
+            }
+        } catch (e: SecurityException) {
+            Toast.makeText(requireContext(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun updateLocationUi(location: Location) {
+        lat = location.latitude
+        lng = location.longitude
+        tvKoordinat.text = String.format(
+            Locale.getDefault(),
+            "Koordinat: %.6f, %.6f",
+            location.latitude,
+            location.longitude
+        )
+        updateMap(location)
+    }
+
     private fun updateMap(location: Location) {
+        if (!isAdded || view == null) return
+        if (mapView.repository == null) return
+
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         mapView.controller.animateTo(geoPoint)
 

@@ -8,12 +8,15 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +42,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,6 +59,7 @@ class AbsenMasukFragment : Fragment() {
     private var lat: Double? = null
     private var lng: Double? = null
     private var marker: Marker? = null
+    private var locationListener: LocationListener? = null
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -69,9 +74,38 @@ class AbsenMasukFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 photoUri?.let { uri ->
-                    ivPreview.setImageURI(uri)
-                    btnAbsen.isEnabled = true
-                }
+                    Log.d("AbsenMasuk", "photoUri=$uri")
+                    val file = File(uri.path ?: "")
+                    Log.d("AbsenMasuk", "file exists=${file.exists()} length=${file.length()}")
+
+                    var bitmap = if (file.exists() && file.length() > 0) loadSampledBitmap(uri) else null
+
+                    if (bitmap == null) {
+                        // Fallback: beberapa HP cuma kasih thumbnail via intent data
+                        val thumb = result.data?.extras?.get("data") as? Bitmap
+                        Log.d("AbsenMasuk", "fallback thumbnail=${thumb != null}")
+                        if (thumb != null) {
+                            bitmap = thumb
+                            try {
+                                FileOutputStream(file).use { out ->
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)
+                                }
+                            } catch (e: Exception) {
+                                Log.e("AbsenMasuk", "gagal simpan thumbnail", e)
+                            }
+                        }
+                    }
+
+                    Log.d("AbsenMasuk", "bitmap=${bitmap?.width}x${bitmap?.height}")
+                    if (bitmap != null) {
+                        ivPreview.setImageBitmap(bitmap)
+                        btnAbsen.isEnabled = true
+                    } else {
+                        Toast.makeText(requireContext(), "Gagal memuat foto", Toast.LENGTH_SHORT).show()
+                    }
+                } ?: Log.d("AbsenMasuk", "photoUri null")
+            } else {
+                Log.d("AbsenMasuk", "resultCode=${result.resultCode}")
             }
         }
 
@@ -145,6 +179,14 @@ class AbsenMasukFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        locationListener?.let {
+            try {
+                val lm = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                lm.removeUpdates(it)
+            } catch (_: Exception) {
+            }
+        }
+        locationListener = null
         if (::mapView.isInitialized) {
             mapView.onDetach()
         }
@@ -159,25 +201,45 @@ class AbsenMasukFragment : Fragment() {
     private fun getLocation() {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
-        if (location != null) {
-            lat = location.latitude
-            lng = location.longitude
-            tvKoordinat.text = String.format(
-                Locale.getDefault(),
-                "Koordinat: %.6f, %.6f",
-                location.latitude,
-                location.longitude
-            )
-            updateMap(location)
-        } else {
-            tvKoordinat.text = "Koordinat: belum didapat, pastikan GPS aktif"
+        tvKoordinat.text = "Koordinat: mencari lokasi, pastikan GPS aktif..."
+
+        // Minta posisi terbaru dari GPS biar titiknya akurat
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                if (!isAdded || view == null) return
+                updateLocationUi(location)
+            }
+        }
+        locationListener = listener
+        try {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, listener, Looper.getMainLooper())
+            }
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, listener, Looper.getMainLooper())
+            }
+        } catch (e: SecurityException) {
+            Toast.makeText(requireContext(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun updateLocationUi(location: Location) {
+        lat = location.latitude
+        lng = location.longitude
+        tvKoordinat.text = String.format(
+            Locale.getDefault(),
+            "Koordinat: %.6f, %.6f",
+            location.latitude,
+            location.longitude
+        )
+        updateMap(location)
+    }
+
     private fun updateMap(location: Location) {
+        if (!isAdded || view == null) return
+        if (mapView.repository == null) return
+
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         mapView.controller.animateTo(geoPoint)
 
@@ -239,6 +301,21 @@ class AbsenMasukFragment : Fragment() {
 
         val encoded = Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
         return "data:image/jpeg;base64,$encoded"
+    }
+
+    private fun loadSampledBitmap(uri: Uri): Bitmap? {
+        val file = File(uri.path ?: "")
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, options)
+
+        var sampleSize = 1
+        val maxDim = 1024
+        while (options.outWidth / sampleSize > maxDim || options.outHeight / sampleSize > maxDim) {
+            sampleSize *= 2
+        }
+
+        val decodeOptions = BitmapFactory.Options().apply { inSampleSize = sampleSize }
+        return BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
     }
 
     private fun submitAbsen() {
