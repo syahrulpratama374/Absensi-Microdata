@@ -7,39 +7,67 @@
     android:gravity="center_horizontal"
     android:background="#F8FBFF">
 
+    <!-- Avatar -->
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/ic_launcher_foreground"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="16dp" />
 
+    <!-- Nama User -->
     <TextView
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profil Karyawan"
-        android:textSize="24sp"
+        android:text="Nama Karyawan"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#012970"
         android:layout_marginTop="16dp" />
 
+    <!-- Username / ID -->
+    <TextView
+        android:id="@+id/tvId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username: -"
+        android:textSize="14sp"
+        android:textColor="#899BBD"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Tombol Edit Profil -->
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Edit Profil"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#4154F1"
+        android:backgroundTint="#E0E5FF"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Tombol Ubah Password -->
     <Button
         android:id="@+id/btnUbahPassword"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:text="Ubah Password"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginTop="48dp"
-        android:backgroundTint="#4154F1" />
+        android:backgroundTint="#4154F1"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Tombol Logout -->
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:text="Logout"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="#CC1A00"
-        android:layout_marginTop="16dp"
         android:backgroundTint="#FFCDD2" />
+
 </LinearLayout>
