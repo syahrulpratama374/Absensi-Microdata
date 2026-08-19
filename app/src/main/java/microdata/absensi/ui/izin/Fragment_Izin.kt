@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -32,10 +33,12 @@ import java.util.Locale
 class IzinFragment : Fragment() {
 
     private lateinit var ivPreview: ImageView
+    private lateinit var tvStatus: TextView
     private lateinit var etKeterangan: TextInputEditText
     private lateinit var btnIzin: MaterialButton
 
     private var photoUri: Uri? = null
+    private var sudahAbsenHariIni = false
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -63,6 +66,7 @@ class IzinFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_izin, container, false)
 
         ivPreview = view.findViewById(R.id.iv_preview)
+        tvStatus = view.findViewById(R.id.tv_status)
         etKeterangan = view.findViewById(R.id.et_keterangan)
         btnIzin = view.findViewById(R.id.btn_izin)
 
@@ -73,6 +77,8 @@ class IzinFragment : Fragment() {
         btnIzin.setOnClickListener {
             submitIzin()
         }
+
+        checkSudahAbsen()
 
         return view
     }
@@ -102,6 +108,17 @@ class IzinFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Gagal buat file foto", Toast.LENGTH_SHORT).show()
             null
+        }
+    }
+
+    private fun checkSudahAbsen() {
+        val session = UtilsSession(requireContext())
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        if (session.getAbsenDate("IZIN") == today) {
+            sudahAbsenHariIni = true
+            btnIzin.isEnabled = false
+            tvStatus.visibility = View.VISIBLE
+            tvStatus.text = "Anda sudah izin hari ini"
         }
     }
 
@@ -150,6 +167,11 @@ class IzinFragment : Fragment() {
                         response.body()?.message ?: "Izin terkirim",
                         Toast.LENGTH_SHORT
                     ).show()
+                    UtilsSession(requireContext()).saveAbsenDate("IZIN")
+                    sudahAbsenHariIni = true
+                    btnIzin.isEnabled = false
+                    tvStatus.visibility = View.VISIBLE
+                    tvStatus.text = "Anda sudah izin hari ini"
                     resetForm()
                 } else {
                     Toast.makeText(

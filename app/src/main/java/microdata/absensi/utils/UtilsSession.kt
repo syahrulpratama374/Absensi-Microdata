@@ -2,6 +2,9 @@ package microdata.absensi.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class UtilsSession(context: Context) {
 
@@ -39,6 +42,18 @@ class UtilsSession(context: Context) {
 
     fun getRefreshToken(): String? {
         return prefs.getString("REFRESH_TOKEN", null)
+    }
+
+    // Simpan tanggal absen per jenis (MASUK/PULANG/IZIN) untuk cegah absen 2x sehari
+    fun saveAbsenDate(kodeJenis: String) {
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        editor.putString("ABSEN_DATE_$kodeJenis", date)
+        editor.apply()
+    }
+
+    // Ambil tanggal absen terakhir untuk jenis tertentu
+    fun getAbsenDate(kodeJenis: String): String? {
+        return prefs.getString("ABSEN_DATE_$kodeJenis", null)
     }
 
     // Buat fungsi Logout

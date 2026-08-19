@@ -37,6 +37,7 @@ import java.util.Locale
 class AbsenPulangFragment : Fragment() {
 
     private lateinit var tvKoordinat: TextView
+    private lateinit var tvStatus: TextView
     private lateinit var etKeterangan: TextInputEditText
     private lateinit var btnAbsen: MaterialButton
     private lateinit var mapView: MapView
@@ -45,6 +46,7 @@ class AbsenPulangFragment : Fragment() {
     private var lng: Double? = null
     private var marker: Marker? = null
     private var locationListener: LocationListener? = null
+    private var sudahAbsenHariIni = false
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -63,6 +65,7 @@ class AbsenPulangFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_absen_pulang, container, false)
 
         tvKoordinat = view.findViewById(R.id.tv_koordinat)
+        tvStatus = view.findViewById(R.id.tv_status)
         etKeterangan = view.findViewById(R.id.et_keterangan)
         btnAbsen = view.findViewById(R.id.btn_absen)
         mapView = view.findViewById(R.id.map)
@@ -79,6 +82,8 @@ class AbsenPulangFragment : Fragment() {
         btnAbsen.setOnClickListener {
             submitAbsen()
         }
+
+        checkSudahAbsen()
 
         if (hasLocationPermission()) {
             getLocation()
@@ -194,6 +199,17 @@ class AbsenPulangFragment : Fragment() {
         mapView.invalidate()
     }
 
+    private fun checkSudahAbsen() {
+        val session = UtilsSession(requireContext())
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        if (session.getAbsenDate("PULANG") == today) {
+            sudahAbsenHariIni = true
+            btnAbsen.isEnabled = false
+            tvStatus.visibility = View.VISIBLE
+            tvStatus.text = "Anda sudah absen pulang hari ini"
+        }
+    }
+
     private fun submitAbsen() {
         val currentLat = lat
         val currentLng = lng
@@ -229,6 +245,11 @@ class AbsenPulangFragment : Fragment() {
                         response.body()?.message ?: "Absen berhasil",
                         Toast.LENGTH_SHORT
                     ).show()
+                    UtilsSession(requireContext()).saveAbsenDate("PULANG")
+                    sudahAbsenHariIni = true
+                    btnAbsen.isEnabled = false
+                    tvStatus.visibility = View.VISIBLE
+                    tvStatus.text = "Anda sudah absen pulang hari ini"
                     etKeterangan.text?.clear()
                 } else {
                     Toast.makeText(

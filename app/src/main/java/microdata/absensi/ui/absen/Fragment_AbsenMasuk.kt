@@ -47,6 +47,7 @@ class AbsenMasukFragment : Fragment() {
 
     private lateinit var ivPreview: ImageView
     private lateinit var tvKoordinat: TextView
+    private lateinit var tvStatus: TextView
     private lateinit var etKeterangan: TextInputEditText
     private lateinit var btnAbsen: MaterialButton
     private lateinit var mapView: MapView
@@ -56,6 +57,7 @@ class AbsenMasukFragment : Fragment() {
     private var lng: Double? = null
     private var marker: Marker? = null
     private var locationListener: LocationListener? = null
+    private var sudahAbsenHariIni = false
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -75,7 +77,9 @@ class AbsenMasukFragment : Fragment() {
                     Log.d("AbsenMasuk", "bitmap=${bitmap?.width}x${bitmap?.height}")
                     if (bitmap != null) {
                         ivPreview.setImageBitmap(bitmap)
-                        btnAbsen.isEnabled = true
+                        if (!sudahAbsenHariIni) {
+                            btnAbsen.isEnabled = true
+                        }
                     } else {
                         Toast.makeText(requireContext(), "Gagal memuat foto", Toast.LENGTH_SHORT).show()
                     }
@@ -94,6 +98,7 @@ class AbsenMasukFragment : Fragment() {
 
         ivPreview = view.findViewById(R.id.iv_preview)
         tvKoordinat = view.findViewById(R.id.tv_koordinat)
+        tvStatus = view.findViewById(R.id.tv_status)
         etKeterangan = view.findViewById(R.id.et_keterangan)
         btnAbsen = view.findViewById(R.id.btn_absen)
         mapView = view.findViewById(R.id.map)
@@ -114,6 +119,8 @@ class AbsenMasukFragment : Fragment() {
         btnAbsen.setOnClickListener {
             submitAbsen()
         }
+
+        checkSudahAbsen()
 
         if (hasLocationPermission()) {
             getLocation()
@@ -257,6 +264,17 @@ class AbsenMasukFragment : Fragment() {
         }
     }
 
+    private fun checkSudahAbsen() {
+        val session = UtilsSession(requireContext())
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        if (session.getAbsenDate("MASUK") == today) {
+            sudahAbsenHariIni = true
+            btnAbsen.isEnabled = false
+            tvStatus.visibility = View.VISIBLE
+            tvStatus.text = "Anda sudah absen hari ini"
+        }
+    }
+
     private fun submitAbsen() {
         val uri = photoUri
         val currentLat = lat
@@ -303,6 +321,11 @@ class AbsenMasukFragment : Fragment() {
                         response.body()?.message ?: "Absen berhasil",
                         Toast.LENGTH_SHORT
                     ).show()
+                    UtilsSession(requireContext()).saveAbsenDate("MASUK")
+                    sudahAbsenHariIni = true
+                    btnAbsen.isEnabled = false
+                    tvStatus.visibility = View.VISIBLE
+                    tvStatus.text = "Anda sudah absen hari ini"
                     resetForm()
                 } else {
                     Toast.makeText(
