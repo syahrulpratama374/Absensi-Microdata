@@ -1,7 +1,11 @@
 package microdata.absensi.data.remote
 
+import microdata.absensi.data.model.AbsenRequest
+import microdata.absensi.data.model.AbsenResponse
 import microdata.absensi.data.model.LoginRequest
 import microdata.absensi.data.model.LoginResponse
+import microdata.absensi.data.model.LogoutRequest
+import microdata.absensi.data.model.OtpRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -13,4 +17,22 @@ interface AuthApi {
         @Header("x-device-id") deviceId: String,
         @Body request: LoginRequest
     ): Response<LoginResponse>
+
+    @POST("verify-otp")
+    suspend fun verifyOtp(
+        @Header("x-device-id") deviceId: String,
+        @Body request: OtpRequest
+    ): Response<LoginResponse>
+
+    @POST("absen")
+    suspend fun absen(
+        @Header("Authorization") token: String,
+        @Header("x-device-id") deviceId: String,
+        @Body request: AbsenRequest
+    ): Response<AbsenResponse>
+
+    @POST("logout")
+    suspend fun logout(
+        @Body request: LogoutRequest
+    ): Response<AbsenResponse>
 }

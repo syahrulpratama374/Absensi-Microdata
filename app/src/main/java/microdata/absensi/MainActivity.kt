@@ -1,54 +1,42 @@
 package microdata.absensi
 
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import microdata.absensi.ui.auth.LoginActivity
-import microdata.absensi.ui.home.HomeActivity
-import microdata.absensi.utils.UtilsSession
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import microdata.absensi.ui.absen.AbsenMasukFragment
+import microdata.absensi.ui.absen.AbsenPulangFragment
+import microdata.absensi.ui.izin.IzinFragment
+import microdata.absensi.ui.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val logo = findViewById<ImageView>(R.id.iv_logo)
-        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_logo))
-
-        val tvMicrodata = findViewById<TextView>(R.id.tv_microdata)
-        tvMicrodata.post {
-            val paint = tvMicrodata.paint
-            val textWidth = paint.measureText(tvMicrodata.text.toString())
-            val startX = (tvMicrodata.width - textWidth) / 2f
-            paint.shader = LinearGradient(
-                startX,
-                0f,
-                startX + textWidth,
-                0f,
-                intArrayOf(Color.parseColor("#FF0071B5"), Color.parseColor("#FFFF0000")),
-                null,
-                Shader.TileMode.CLAMP
-            )
-            tvMicrodata.invalidate()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, AbsenMasukFragment())
+                .commit()
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent = if (UtilsSession(this).isLoggedIn()) {
-                Intent(this, HomeActivity::class.java)
-            } else {
-                Intent(this, LoginActivity::class.java)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.setOnItemSelectedListener { item ->
+            val fragment: Fragment = when (item.itemId) {
+                R.id.menu_absen_masuk -> AbsenMasukFragment()
+                R.id.menu_absen_pulang -> AbsenPulangFragment()
+                R.id.menu_izin -> IzinFragment()
+                R.id.menu_profile -> ProfileFragment()
+                else -> AbsenMasukFragment()
             }
-            startActivity(intent)
-            finish()
-        }, 1500)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+            true
+        }
+        bottomNav.selectedItemId = R.id.menu_absen_masuk
     }
 }

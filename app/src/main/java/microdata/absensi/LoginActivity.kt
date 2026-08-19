@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import microdata.absensi.R
 import microdata.absensi.data.model.LoginRequest
 import microdata.absensi.data.remote.RetrofitClient
+import microdata.absensi.utils.UtilsSession
 
 class LoginActivity : AppCompatActivity() {
 
@@ -31,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Username dan Password harus diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            UtilsSession(this).saveUsername(username)
 
             // Ambil Device ID
             val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)

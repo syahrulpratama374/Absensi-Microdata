@@ -1,4 +1,4 @@
-package microdata.absensi.ui.auth
+package microdata.absensi.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import microdata.absensi.R
+import microdata.absensi.MainActivity
 import microdata.absensi.data.model.OtpRequest
 import microdata.absensi.data.remote.RetrofitClient
-import microdata.absensi.ui.home.HomeActivity
 import microdata.absensi.utils.UtilsSession
 
 class OtpActivity : AppCompatActivity() {
@@ -63,14 +63,20 @@ class OtpActivity : AppCompatActivity() {
                     val body = response.body()
                     val accessToken = body?.accessToken ?: ""
 
+                    // Jangan simpan session kalau token kosong dari server
+                    if (accessToken.isEmpty()) {
+                        Toast.makeText(this@OtpActivity, "Token kosong dari server, coba lagi", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
                     // Simpan token ke SharedPreferences pakai UtilsSession
                     val session = UtilsSession(this@OtpActivity)
-                    session.saveToken(accessToken)
+                    session.saveToken(accessToken, body?.refreshToken)
 
                     Toast.makeText(this@OtpActivity, "Verifikasi Sukses!", Toast.LENGTH_SHORT).show()
 
-                    // Pindah ke Halaman Utama (HomeActivity)
-                    val intent = Intent(this@OtpActivity, HomeActivity::class.java)
+                    // Pindah ke Halaman Utama (MainActivity)
+                    val intent = Intent(this@OtpActivity, MainActivity::class.java)
                     // Hapus riwayat halaman (Back stack) biar kalau di-back kaga balik ke halaman OTP lagi
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
