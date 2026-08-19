@@ -187,7 +187,9 @@ class IzinFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } finally {
-                btnIzin.isEnabled = true
+                if (!sudahAbsenHariIni) {
+                    btnIzin.isEnabled = true
+                }
                 btnIzin.text = "Kirim Izin"
             }
         }

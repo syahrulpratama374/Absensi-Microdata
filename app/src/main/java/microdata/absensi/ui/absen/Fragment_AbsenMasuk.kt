@@ -341,7 +341,9 @@ class AbsenMasukFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } finally {
-                btnAbsen.isEnabled = true
+                if (!sudahAbsenHariIni) {
+                    btnAbsen.isEnabled = true
+                }
                 btnAbsen.text = "Absen Masuk"
             }
         }
