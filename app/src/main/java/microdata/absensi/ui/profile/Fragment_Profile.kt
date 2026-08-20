@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
         // Ambil ID dari XML
         val tvName = view.findViewById<TextView>(R.id.tvName)
         val tvId = view.findViewById<TextView>(R.id.tvId)
-        val btnEditProfile = view.findViewById<Button>(R.id.btnEditProfile)
+//        val btnEditProfile = view.findViewById<Button>(R.id.btnEditProfile)
         val btnUbahPassword = view.findViewById<Button>(R.id.btnUbahPassword)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
 
@@ -40,9 +40,9 @@ class ProfileFragment : Fragment() {
         tvId.text = "Username: ${session.getUsername() ?: "-"}"
 
         // Aksi Tombol
-        btnEditProfile.setOnClickListener {
-            Toast.makeText(requireContext(), "Fitur Edit Profil belum tersedia", Toast.LENGTH_SHORT).show()
-        }
+//        btnEditProfile.setOnClickListener {
+//            Toast.makeText(requireContext(), "Fitur Edit Profil belum tersedia", Toast.LENGTH_SHORT).show()
+//        }
 
         btnUbahPassword.setOnClickListener {
             startActivity(Intent(requireContext(), UbahPasswordActivity::class.java))
