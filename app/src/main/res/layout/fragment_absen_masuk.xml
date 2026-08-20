@@ -1,214 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FBFF">
+    android:background="@drawable/background_absensi">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@android:color/transparent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:background="@drawable/bg_circle_pill"
-                android:contentDescription="@string/menu_absen_masuk"
-                android:padding="13dp"
-                android:src="@drawable/ic_absen_masuk"
-                app:tint="#0062FF" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/adlam_display"
-                    android:text="Absen Masuk"
-                    android:textColor="#012970"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_tanggal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#899BBD"
-                    android:textSize="13sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
-            app:strokeWidth="0dp">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextClock
-                    android:id="@+id/tc_jam"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:format12Hour="HH:mm:ss"
-                    android:format24Hour="HH:mm:ss"
-                    android:gravity="center"
-                    android:textColor="#012970"
-                    android:textSize="42sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Foto Bukti"
-                    android:textColor="#012970"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:clipToOutline="true"
-                    app:cardBackgroundColor="#E4EBF7"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
-
-                    <ImageView
-                        android:id="@+id/iv_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="160dp"
-                        android:contentDescription="Foto bukti"
-                        android:scaleType="centerCrop" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_foto"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Ambil Foto Bukti"
-                    android:textAllCaps="false"
-                    android:textStyle="bold"
-                    app:backgroundTint="#0062FF"
-                    app:cornerRadius="16dp" />
+                    android:background="@drawable/bg_circle_pill"
+                    android:contentDescription="@string/menu_absen_masuk"
+                    android:padding="13dp"
+                    android:src="@drawable/ic_absen_masuk"
+                    app:tint="#0062FF" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Lokasi Anda"
-                    android:textColor="#012970"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="14dp"
+                    android:orientation="vertical">
 
-                <com.google.android.material.card.MaterialCardView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/adlam_display"
+                        android:text="Absen Masuk"
+                        android:textColor="#012970"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_tanggal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#899BBD"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:clipToOutline="true"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="#E4EBF7"
-                    app:strokeWidth="1dp">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <org.osmdroid.views.MapView
-                        android:id="@+id/map"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/tv_koordinat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Koordinat: menunggu lokasi..."
-                    android:textColor="#012970"
-                    android:textSize="13sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_muat_lokasi"
-                    android:layout_width="match_parent"
-                    android:layout_height="46dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Muat Ulang Lokasi"
-                    android:textAllCaps="false"
-                    android:textColor="#4154F1"
-                    android:textStyle="bold"
-                    app:backgroundTint="#E0E5FF"
-                    app:cornerRadius="16dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Keterangan (opsional)"
-                    app:boxBackgroundColor="#F8FBFF"
-                    app:boxCornerRadiusBottomEnd="16dp"
-                    app:boxCornerRadiusBottomStart="16dp"
-                    app:boxCornerRadiusTopEnd="16dp"
-                    app:boxCornerRadiusTopStart="16dp"
-                    app:boxStrokeColor="#A0C1FF">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_keterangan"
+                    <TextClock
+                        android:id="@+id/tc_jam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:maxLines="2" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:format12Hour="HH:mm:ss"
+                        android:format24Hour="HH:mm:ss"
+                        android:gravity="center"
+                        android:textColor="#012970"
+                        android:textSize="42sp"
+                        android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_absen"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="20dp"
-                    android:enabled="false"
-                    android:text="Absen Masuk"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="#0062FF"
-                    app:cornerRadius="16dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Foto Bukti"
+                        android:textColor="#012970"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_status_pill"
-                    android:gravity="center"
-                    android:padding="12dp"
-                    android:textColor="#2E7D32"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-</ScrollView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:clipToOutline="true"
+                        app:cardBackgroundColor="#E4EBF7"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:id="@+id/iv_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"
+                            android:contentDescription="Foto bukti"
+                            android:scaleType="centerCrop" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_foto"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Ambil Foto Bukti"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        app:backgroundTint="#0062FF"
+                        app:cornerRadius="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Lokasi Anda"
+                        android:textColor="#012970"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:clipToOutline="true"
+                        app:cardBackgroundColor="@android:color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#E4EBF7"
+                        app:strokeWidth="1dp">
+
+                        <org.osmdroid.views.MapView
+                            android:id="@+id/map"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tv_koordinat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Koordinat: menunggu lokasi..."
+                        android:textColor="#012970"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_muat_lokasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Muat Ulang Lokasi"
+                        android:textAllCaps="false"
+                        android:textColor="#4154F1"
+                        android:textStyle="bold"
+                        app:backgroundTint="#E0E5FF"
+                        app:cornerRadius="16dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="Keterangan (opsional)"
+                        app:boxBackgroundColor="#F8FBFF"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxStrokeColor="#A0C1FF">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_keterangan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="2" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_absen"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:enabled="false"
+                        android:text="Absen Masuk"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="#0062FF"
+                        app:cornerRadius="16dp" />
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_status_pill"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:textColor="#2E7D32"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
