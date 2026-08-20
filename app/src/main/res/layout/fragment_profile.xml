@@ -1,73 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center_horizontal"
-    android:background="#F8FBFF">
+    android:background="@drawable/background_absensi">
 
-    <!-- Avatar -->
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_marginTop="16dp" />
-
-    <!-- Nama User -->
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nama Karyawan"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#012970"
-        android:layout_marginTop="16dp" />
-
-    <!-- Username / ID -->
-    <TextView
-        android:id="@+id/tvId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username: -"
-        android:textSize="14sp"
-        android:textColor="#899BBD"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="32dp" />
-
-    <!-- Tombol Edit Profil -->
-    <Button
-        android:id="@+id/btnEditProfile"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Edit Profil"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="#4154F1"
-        android:backgroundTint="#E0E5FF"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@android:color/transparent">
 
-    <!-- Tombol Ubah Password -->
-    <Button
-        android:id="@+id/btnUbahPassword"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Ubah Password"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:backgroundTint="#4154F1"
-        android:layout_marginBottom="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center_horizontal">
 
-    <!-- Tombol Logout -->
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Logout"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="#CC1A00"
-        android:backgroundTint="#FFCDD2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/adlam_display"
+                android:text="Profil Pengguna"
+                android:textColor="#012970"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-</LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center_horizontal">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_launcher_foreground"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Karyawan"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="#012970"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:id="@+id/tvId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Username: -"
+                        android:textSize="14sp"
+                        android:textColor="#899BBD"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="32dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUbahPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="Ubah Password"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        app:backgroundTint="#0062FF"
+                        app:cornerRadius="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="Logout"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#CC1A00"
+                        app:backgroundTint="#FFCDD2"
+                        app:cornerRadius="16dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
