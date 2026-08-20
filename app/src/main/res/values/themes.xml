@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.AbsensiMicrodata" parent="Base.Theme.AbsensiMicrodata" />
+
+    <style name="NavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/pill_blue</item>
+        <item name="android:width">44dp</item>
+        <item name="android:height">44dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Full</item>
+    </style>
 </resources>
