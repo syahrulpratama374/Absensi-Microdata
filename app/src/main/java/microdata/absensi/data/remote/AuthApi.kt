@@ -1,8 +1,7 @@
 package microdata.absensi.data.remote
 
+import microdata.absensi.data.model.UbahPasswordRequest
 import microdata.absensi.data.model.GeneralResponse
-import microdata.absensi.data.model.CekPasswordRequest
-import microdata.absensi.data.model.KonfirmasiUbahPasswordRequest
 import microdata.absensi.data.model.AbsenRequest
 import microdata.absensi.data.model.AbsenResponse
 import microdata.absensi.data.model.LoginRequest
@@ -39,17 +38,10 @@ interface AuthApi {
         @Body request: LogoutRequest
     ): Response<AbsenResponse>
 
-    @POST("cek-password")
-    suspend fun cekPassword(
+    @POST("ubah-password")
+    suspend fun ubahPassword(
         @Header("Authorization") token: String,
         @Header("x-device-id") deviceId: String,
-        @Body request: CekPasswordRequest
-    ): Response<GeneralResponse>
-
-    @POST("konfirmasi-ubah-password")
-    suspend fun konfirmasiUbahPassword(
-        @Header("Authorization") token: String,
-        @Header("x-device-id") deviceId: String,
-        @Body request: KonfirmasiUbahPasswordRequest
+        @Body request: UbahPasswordRequest
     ): Response<GeneralResponse>
 }
